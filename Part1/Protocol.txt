@@ -1,0 +1,91 @@
+The client opens a TCP connection to the server (port 5000) and keeps it open for the whole session. Each request is one header line, and each reply starts with one header line.
+
+Fields should not contain // or a Line Feed.
+Commands are written in upper case.
+Every reply is either a success header or ERROR[one space][code][Line Feed].
+After login, the client sends the token it received in every later request. The server rejects any request with a missing or unknown token.
+
+1. Create an account
+
+The client sends:
+
+REGISTER//[username]//[password][Line Feed]
+
+Upon receiving this header, the server checks that both fields are present and non-empty, then searches the Accounts table for the username.
+
+If the header is malformed or a field is empty, the server replies:
+ERROR[one space]111[Line Feed]
+If the username already exists, the server replies:
+ERROR[one space]121[Line Feed]
+Otherwise the server stores the new account (username, password) and replies:
+REGISTERED[Line Feed]
+
+2. Log in
+
+The client sends:
+
+LOGIN//[username]//[password][Line Feed]
+
+Upon receiving this header, the server looks up the account and compares the password.
+
+If the header is malformed, the server replies:
+ERROR[one space]111[Line Feed]
+If the username is unknown or the password is wrong, the server replies:
+ERROR[one space]122[Line Feed]
+If the credentials are correct, the server generates a random secret token (for example 32 hex characters), stores it in the Sessions table as token → username, and replies:
+OK//[token][Line Feed]
+
+The client keeps the token in memory and sends it with every later command.
+
+3. Create a room
+
+The client sends:
+
+CREATEROOM//[token]//[room name]//[description][Line Feed]
+
+Upon receiving this header, the server validates the token, then searches the Rooms list for the name.
+
+If the header is malformed or the name or description is empty, the server replies:
+ERROR[one space]111[Line Feed]
+If the token is invalid, the server replies:
+ERROR[one space]131[Line Feed]
+If a room with this name already exists, the server replies:
+ERROR[one space]141[Line Feed]
+Otherwise the server creates the room, assigns the next system-generated ID, appends it to the Rooms list, and replies:
+CREATED//[room ID][Line Feed]
+4. List rooms
+
+The client sends:
+
+LISTROOMS//[token][Line Feed]
+
+Upon receiving this header, the server validates the token.
+
+If the token is invalid, the server replies:
+ERROR[one space]131[Line Feed]
+Otherwise the server replies:
+with a header as the following:
+OK//[number of rooms][Line Feed]
+followed by exactly that many lines, one per room, in creation order:
+[room ID]//[room name]//[description][Line Feed]
+
+If there are no rooms, the reply is OK//0[Line Feed] with no lines after it.
+
+5. Join a room
+
+The client sends:
+
+JOINROOM//[token]//[room ID][Line Feed]
+
+Upon receiving this header, the server validates the token and searches the Rooms list for the ID.
+
+If the header is malformed or the ID is not a number, the server replies:
+ERROR[one space]111[Line Feed]
+If the token is invalid, the server replies:
+ERROR[one space]131[Line Feed]
+If no room has this ID, the server replies:
+ERROR[one space]151[Line Feed]
+If the user is already a member of this room, the server replies:
+ERROR[one space]152[Line Feed]
+Otherwise the server adds the username to the room’s member list and replies:
+JOINED[Line Feed]

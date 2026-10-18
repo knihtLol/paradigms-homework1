@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <schema targetNamespace="urn:ChatRoom"
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:ns="urn:ChatRoom"
+    xmlns="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="unqualified"
+    attributeFormDefault="unqualified">
+    <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+    <complexType name="Room"><!-- ns__Room -->
+          <sequence>
+            <element name="roomId" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- ns__Room::roomId -->
+            <element name="roomName" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- ns__Room::roomName -->
+            <element name="roomDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- ns__Room::roomDescription -->
+          </sequence>
+    </complexType>
+    <complexType name="Message"><!-- ns__Message -->
+          <sequence>
+            <element name="sender" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- ns__Message::sender -->
+            <element name="roomName" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- ns__Message::roomName -->
+            <element name="isPrivate" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Message::isPrivate -->
+            <element name="text" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- ns__Message::text -->
+          </sequence>
+    </complexType>
+    <complexType name="StringList"><!-- ns__StringList -->
+          <sequence>
+            <element name="item" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/><!-- ns__StringList::__sizeitem -->
+          </sequence>
+    </complexType>
+    <complexType name="RoomArray"><!-- ns__RoomArray -->
+          <sequence>
+            <element name="room" type="ns:Room" minOccurs="0" maxOccurs="unbounded"/><!-- ns__RoomArray::__sizeroom -->
+          </sequence>
+    </complexType>
+    <complexType name="MessageArray"><!-- ns__MessageArray -->
+          <sequence>
+            <element name="message" type="ns:Message" minOccurs="0" maxOccurs="unbounded"/><!-- ns__MessageArray::__sizemessage -->
+          </sequence>
+    </complexType>
+  </schema>
+

@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="ChatRoom"
+  targetNamespace="urn:ChatRoom"
+  xmlns:tns="urn:ChatRoom"
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:ns="urn:ChatRoom"
+  xmlns:SOAP="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:HTTP="http://schemas.xmlsoap.org/wsdl/http/"
+  xmlns:MIME="http://schemas.xmlsoap.org/wsdl/mime/"
+  xmlns:DIME="http://schemas.xmlsoap.org/ws/2002/04/dime/wsdl/"
+  xmlns:WSDL="http://schemas.xmlsoap.org/wsdl/"
+  xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+<types>
+
+  <schema targetNamespace="urn:ChatRoom"
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:ns="urn:ChatRoom"
+    xmlns="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="unqualified"
+    attributeFormDefault="unqualified">
+    <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+    <complexType name="Room"><!-- ns__Room -->
+          <sequence>
+            <element name="roomId" type="xsd:int" minOccurs="1" maxOccurs="1"/><!-- ns__Room::roomId -->
+            <element name="roomName" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- ns__Room::roomName -->
+            <element name="roomDescription" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- ns__Room::roomDescription -->
+          </sequence>
+    </complexType>
+    <complexType name="Message"><!-- ns__Message -->
+          <sequence>
+            <element name="sender" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- ns__Message::sender -->
+            <element name="roomName" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- ns__Message::roomName -->
+            <element name="isPrivate" type="xsd:boolean" minOccurs="1" maxOccurs="1"/><!-- ns__Message::isPrivate -->
+            <element name="text" type="xsd:string" minOccurs="0" maxOccurs="1"/><!-- ns__Message::text -->
+          </sequence>
+    </complexType>
+    <complexType name="StringList"><!-- ns__StringList -->
+          <sequence>
+            <element name="item" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/><!-- ns__StringList::__sizeitem -->
+          </sequence>
+    </complexType>
+    <complexType name="RoomArray"><!-- ns__RoomArray -->
+          <sequence>
+            <element name="room" type="ns:Room" minOccurs="0" maxOccurs="unbounded"/><!-- ns__RoomArray::__sizeroom -->
+          </sequence>
+    </complexType>
+    <complexType name="MessageArray"><!-- ns__MessageArray -->
+          <sequence>
+            <element name="message" type="ns:Message" minOccurs="0" maxOccurs="unbounded"/><!-- ns__MessageArray::__sizemessage -->
+          </sequence>
+    </complexType>
+  </schema>
+
+</types>
+
+<message name="CreateAccount">
+  <part name="username" type="xsd:string"/><!-- ns__CreateAccount::username -->
+  <part name="password" type="xsd:string"/><!-- ns__CreateAccount::password -->
+</message>
+
+<message name="Result">
+  <part name="success" type="xsd:boolean"/><!-- ns__CreateAccount::success -->
+  <part name="error" type="xsd:string"/><!-- ns__CreateAccount::error -->
+</message>
+
+<message name="LogIn">
+  <part name="username" type="xsd:string"/><!-- ns__LogIn::username -->
+  <part name="password" type="xsd:string"/><!-- ns__LogIn::password -->
+</message>
+
+<message name="SessionInfo">
+  <part name="success" type="xsd:boolean"/><!-- ns__LogIn::success -->
+  <part name="sessionToken" type="xsd:string"/><!-- ns__LogIn::sessionToken -->
+  <part name="error" type="xsd:string"/><!-- ns__LogIn::error -->
+</message>
+
+<message name="CreateRoom">
+  <part name="token" type="xsd:string"/><!-- ns__CreateRoom::token -->
+  <part name="roomName" type="xsd:string"/><!-- ns__CreateRoom::roomName -->
+  <part name="roomDescription" type="xsd:string"/><!-- ns__CreateRoom::roomDescription -->
+</message>
+
+<message name="RoomInfo">
+  <part name="success" type="xsd:boolean"/><!-- ns__CreateRoom::success -->
+  <part name="room" type="ns:Room"/><!-- ns__CreateRoom::room -->
+  <part name="error" type="xsd:string"/><!-- ns__CreateRoom::error -->
+</message>
+
+<message name="ListRooms">
+  <part name="token" type="xsd:string"/><!-- ns__ListRooms::token -->
+</message>
+
+<message name="RoomList">
+  <part name="success" type="xsd:boolean"/><!-- ns__ListRooms::success -->
+  <part name="error" type="xsd:string"/><!-- ns__ListRooms::error -->
+  <part name="rooms" type="ns:RoomArray"/><!-- ns__ListRooms::rooms -->
+</message>
+
+<message name="JoinRoom">
+  <part name="token" type="xsd:string"/><!-- ns__JoinRoom::token -->
+  <part name="roomName" type="xsd:string"/><!-- ns__JoinRoom::roomName -->
+</message>
+
+<message name="DisplayJoined">
+  <part name="token" type="xsd:string"/><!-- ns__DisplayJoined::token -->
+  <part name="roomName" type="xsd:string"/><!-- ns__DisplayJoined::roomName -->
+</message>
+
+<message name="UserList">
+  <part name="success" type="xsd:boolean"/><!-- ns__DisplayJoined::success -->
+  <part name="error" type="xsd:string"/><!-- ns__DisplayJoined::error -->
+  <part name="usernames" type="ns:StringList"/><!-- ns__DisplayJoined::usernames -->
+</message>
+
+<message name="Broadcast">
+  <part name="token" type="xsd:string"/><!-- ns__Broadcast::token -->
+  <part name="roomName" type="xsd:string"/><!-- ns__Broadcast::roomName -->
+  <part name="message" type="xsd:string"/><!-- ns__Broadcast::message -->
+</message>
+
+<message name="SendPrivate">
+  <part name="token" type="xsd:string"/><!-- ns__SendPrivate::token -->
+  <part name="roomName" type="xsd:string"/><!-- ns__SendPrivate::roomName -->
+  <part name="receiver" type="xsd:string"/><!-- ns__SendPrivate::receiver -->
+  <part name="message" type="xsd:string"/><!-- ns__SendPrivate::message -->
+</message>
+
+<message name="Leave">
+  <part name="token" type="xsd:string"/><!-- ns__Leave::token -->
+  <part name="roomName" type="xsd:string"/><!-- ns__Leave::roomName -->
+</message>
+
+<message name="LogOut">
+  <part name="token" type="xsd:string"/><!-- ns__LogOut::token -->
+</message>
+
+<message name="GetMessages">
+  <part name="token" type="xsd:string"/><!-- ns__GetMessages::token -->
+</message>
+
+<message name="MessageList">
+  <part name="success" type="xsd:boolean"/><!-- ns__GetMessages::success -->
+  <part name="error" type="xsd:string"/><!-- ns__GetMessages::error -->
+  <part name="messages" type="ns:MessageArray"/><!-- ns__GetMessages::messages -->
+</message>
+
+<portType name="ChatRoomPortType">
+  <operation name="CreateAccount">
+    <documentation>Service definition of function ns__CreateAccount</documentation>
+    <input message="tns:CreateAccount"/>
+    <output message="tns:Result"/>
+  </operation>
+  <operation name="LogIn">
+    <documentation>Service definition of function ns__LogIn</documentation>
+    <input message="tns:LogIn"/>
+    <output message="tns:SessionInfo"/>
+  </operation>
+  <operation name="CreateRoom">
+    <documentation>Service definition of function ns__CreateRoom</documentation>
+    <input message="tns:CreateRoom"/>
+    <output message="tns:RoomInfo"/>
+  </operation>
+  <operation name="ListRooms">
+    <documentation>Service definition of function ns__ListRooms</documentation>
+    <input message="tns:ListRooms"/>
+    <output message="tns:RoomList"/>
+  </operation>
+  <operation name="JoinRoom">
+    <documentation>Service definition of function ns__JoinRoom</documentation>
+    <input message="tns:JoinRoom"/>
+    <output message="tns:Result"/>
+  </operation>
+  <operation name="DisplayJoined">
+    <documentation>Service definition of function ns__DisplayJoined</documentation>
+    <input message="tns:DisplayJoined"/>
+    <output message="tns:UserList"/>
+  </operation>
+  <operation name="Broadcast">
+    <documentation>Service definition of function ns__Broadcast</documentation>
+    <input message="tns:Broadcast"/>
+    <output message="tns:Result"/>
+  </operation>
+  <operation name="SendPrivate">
+    <documentation>Service definition of function ns__SendPrivate</documentation>
+    <input message="tns:SendPrivate"/>
+    <output message="tns:Result"/>
+  </operation>
+  <operation name="Leave">
+    <documentation>Service definition of function ns__Leave</documentation>
+    <input message="tns:Leave"/>
+    <output message="tns:Result"/>
+  </operation>
+  <operation name="LogOut">
+    <documentation>Service definition of function ns__LogOut</documentation>
+    <input message="tns:LogOut"/>
+    <output message="tns:Result"/>
+  </operation>
+  <operation name="GetMessages">
+    <documentation>Service definition of function ns__GetMessages</documentation>
+    <input message="tns:GetMessages"/>
+    <output message="tns:MessageList"/>
+  </operation>
+</portType>
+
+<binding name="ChatRoom" type="tns:ChatRoomPortType">
+  <SOAP:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+  <operation name="CreateAccount">
+    <SOAP:operation style="rpc" soapAction=""/>
+    <input>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </output>
+  </operation>
+  <operation name="LogIn">
+    <SOAP:operation style="rpc" soapAction=""/>
+    <input>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </output>
+  </operation>
+  <operation name="CreateRoom">
+    <SOAP:operation style="rpc" soapAction=""/>
+    <input>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </output>
+  </operation>
+  <operation name="ListRooms">
+    <SOAP:operation style="rpc" soapAction=""/>
+    <input>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </output>
+  </operation>
+  <operation name="JoinRoom">
+    <SOAP:operation style="rpc" soapAction=""/>
+    <input>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </output>
+  </operation>
+  <operation name="DisplayJoined">
+    <SOAP:operation style="rpc" soapAction=""/>
+    <input>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </output>
+  </operation>
+  <operation name="Broadcast">
+    <SOAP:operation style="rpc" soapAction=""/>
+    <input>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </output>
+  </operation>
+  <operation name="SendPrivate">
+    <SOAP:operation style="rpc" soapAction=""/>
+    <input>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </output>
+  </operation>
+  <operation name="Leave">
+    <SOAP:operation style="rpc" soapAction=""/>
+    <input>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </output>
+  </operation>
+  <operation name="LogOut">
+    <SOAP:operation style="rpc" soapAction=""/>
+    <input>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </output>
+  </operation>
+  <operation name="GetMessages">
+    <SOAP:operation style="rpc" soapAction=""/>
+    <input>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </input>
+    <output>
+          <SOAP:body use="literal" parts="Body" namespace="urn:ChatRoom"/>
+    </output>
+  </operation>
+</binding>
+
+<service name="ChatRoom">
+  <documentation>gSOAP 2.8.139 generated service definition</documentation>
+  <port name="ChatRoom" binding="tns:ChatRoom">
+    <SOAP:address location="http://localhost:8080"/>
+  </port>
+</service>
+
+</definitions>

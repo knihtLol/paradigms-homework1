@@ -1,0 +1,18 @@
+1- Choose and justify a technology
+
+Chosen technology: 
+
+XML/SOAP web services on top of HTTP with gSOAP used to generate the contract.
+
+Justification:
+
+- Language-agnostic: the users may run software written in different languages. A SOAP service is described by a WSDL file, which is plain XML and not tied to any language.
+- Precise contract: The ten functions map directly onto WSDL operations, each with typed inputs and outputs, so the interface is defined exactly.
+- Fits the problem: The chat functions are request/response calls, and the session token travels as a parameter in each call.
+Why not REST/OpenAPI: REST/OpenAPI is data driven but is less formal about operations. 
+
+2. In which formal language should the contract be specified?
+
+WSDL (Web Services Description Language), with XML Schema (XSD) for the data types. Since the chosen technology is SOAP, the contract language is WSDL. It is the W3C standard for describing SOAP services.
+Because WSDL is a formal, machine-readable language, tools can validate it and generate client and server code from it.
+We wrote the contract as a gSOAP header file (chatApi.h) in C notation. The compiler soapcpp2 then generates ChatRoom.wsdl automatically from it. So the contract is formally specified in WSDL, and the header is a convenient way of producing it.

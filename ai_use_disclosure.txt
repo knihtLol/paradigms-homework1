@@ -1,0 +1,113 @@
+RESPONSIBLE USE OF AI
+
+------------------------------------------------------------
+1. AI tools selected and used (2%)
+------------------------------------------------------------
+- Claude (Sonnet) - conversational AI assistant, used via web chat
+  during Part II of the assignment.
+
+------------------------------------------------------------
+2. Why these tools vs. others (2%)
+------------------------------------------------------------
+- Claude the questions I
+  had were about my own code and concepts I was stuck on (gSOAP
+  syntax, SOAP server connection handling, refactoring). A
+  conversational assistant answers in the context of the code I
+  paste and explains why something works, whereas documentation
+  requires already knowing what to look for.
+
+- Claude compilers report that something is
+  wrong but cannot teach unfamiliar syntax, suggest structural
+  improvements, or explain how the pieces of a SOAP system fit
+  together.
+
+- I used Claude because it provided
+  clear, well-structured explanations and produced syntactically
+  correct gSOAP declarations and coherent refactored code on the
+  first attempt, which made the learning loop faster.
+
+
+------------------------------------------------------------
+3. How I used them (2%)
+------------------------------------------------------------
+My use of Claude in Part II covered the following kinds of
+assistance:
+
+1. Learning unfamiliar syntax: when I encountered Python constructs
+   I was not familiar with (e.g., dictionary comprehensions,
+   **kwargs, str.rsplit, dict.pop with a default,
+   BaseHTTPRequestHandler mechanics), I asked Claude to explain
+   what they do and how they work, with examples.
+
+2. Converting my header file to gSOAP syntax: I first wrote the
+   Chat Room contract as plain C structs and function prototypes
+   myself. I then shared my C header with Claude and asked it to
+   rewrite it in the //gsoap-directive syntax expected by the
+   soapcpp2 tool (the ns__ prefix convention, __size-prefixed array
+   fields, and the operation prototype format), which generated
+   soap_chatApi.h.
+
+3. Understanding the server-side connection in Part II: I used
+   Claude to review and explain how the HTTP/SOAP connection layer
+   works in the server (how BaseHTTPRequestHandler receives POST
+   requests, how handle() dispatches an XML operation name to a
+   Python function, and how the reply envelope is built), so I
+   could understand how the whole request/response path operates
+   end to end before writing and adapting my own code.
+
+4. Reviewing and modifying server.py and client.py: the original
+   single-file server.py had become too large and heavy to navigate
+   and maintain, so I asked Claude to review it and suggest a
+   cleaner structure. Based on that review, server.py was divided
+   into multiple modules - state.py (shared in-memory data),
+   logic.py (the eleven operations), soap.py (XML rendering and
+   dispatch), http_layer.py (HTTP handling), and main.py (entry
+   point). Claude also reviewed and modified client.py, simplifying
+   and cleaning up the interactive command loop and the
+   response-unwrapping helpers.
+
+------------------------------------------------------------
+4. AI-generated content (2%)
+------------------------------------------------------------
+The following items in this submission were AI-generated (by Claude
+Sonnet) and reviewed, understood, and validated by me:
+
+- The gSOAP-formatted header file soap_chatApi.h - Claude rewrote
+  my hand-written C contract header into gSOAP syntax (directives,
+  ns__ types, array conventions, operation prototypes).
+
+- The modular refactor of server.py - the separation into state.py,
+  logic.py, soap.py, http_layer.py, and main.py, including the
+  replacement of the module-level global next_room_id mechanism
+  with a shared counters dictionary, and the re-routing of all
+  state references through the state module.
+
+- Reviewed and modified versions of server.py and client.py -
+  AI-assisted cleanup of both files, including restructuring the
+  server into modules and streamlining the client's command
+  dispatch and helper functions (unwrap, as_list, show).
+
+- Explanations and clarifications of Python syntax and of the
+  server-side connection flow, which informed how I wrote and
+  adapted my code.
+
+All other submitted artifacts - the Part I architecture and design
+document, the Part I implementation of the chosen functionality,
+and all testing - were produced by me.
+
+
+------------------------------------------------------------
+5. Validation of outputs (2%)
+------------------------------------------------------------
+Because errors in AI suggestions are my responsibility, I validated
+every AI contribution empirically: I ran the complete system end to
+end and tested that everything works perfectly. Specifically, I ran
+the modular server, connected with the client, and exercised all 10
+functionalities (register, login, create room, list rooms, join
+room, display users, broadcast, private message, leave, logout,
+plus message polling), confirming that every operation succeeds and
+returns the responses defined in the contract. I also verified that
+the gSOAP header compiles cleanly with soapcpp2 and produces a
+valid WSDL.
+
+
